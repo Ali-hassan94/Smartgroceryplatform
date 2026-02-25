@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import RegisterPage from "./register";
-import LoginPage from "./login";
+import RegisterPage from "@/auth/register/page";
+import LoginPage from "@/auth/login/page";
 
 export default function AuthLanding() {
   const [show, setShow] = useState<"register" | "login">("register");

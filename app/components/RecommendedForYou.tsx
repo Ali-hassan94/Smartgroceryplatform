@@ -4,9 +4,18 @@ import { useEffect, useState } from "react";
 import { post } from "../lib/api";
 import RecommendationCard from "./RecommendationCard";
 
-export default function RecommendedForYou({ orders }: { orders: any[] }) {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
+interface RecommendationData {
+  frequentlyBought?: string[];
+  relatedProducts?: Record<string, any[]>;
+}
+
+interface RecommendedForYouProps {
+  orders: any[]; // agar orders ka type pata ho to define karo
+}
+
+export default function RecommendedForYou({ orders }: RecommendedForYouProps) {
+  const [data, setData] = useState<RecommendationData | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (!orders || orders.length === 0) return;
@@ -14,7 +23,7 @@ export default function RecommendedForYou({ orders }: { orders: any[] }) {
     setLoading(true);
 
     post("/recommendations", { orders })
-      .then(res => {
+      .then((res: RecommendationData) => {
         console.log("AI recommendation response:", res);
         setData(res);
       })
@@ -55,7 +64,7 @@ export default function RecommendedForYou({ orders }: { orders: any[] }) {
         <div>
           <h3 className="font-semibold mb-2">Often bought together</h3>
 
-          {Object.entries(data.relatedProducts).map(([product, items]: any) => (
+          {Object.entries(data.relatedProducts).map(([product, items]) => (
             <div key={product} className="mb-4">
               <p className="font-medium mb-2">{product}</p>
 
